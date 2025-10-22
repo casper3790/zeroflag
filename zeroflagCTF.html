@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZeroFlag CTF | CTF 戰隊官方網站</title>
+    <!-- 載入 Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 載入 Lucide Icons (用於網頁圖示) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* 設定 Inter 字體，確保良好的閱讀體驗 */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        :root {
+            font-family: 'Inter', sans-serif;
+        }
+        /* VIBRANT STYLE: 深藍色背景 + 橘色高光 (更具活力) */
+        body {
+            background-color: #14172a; /* 深藍色/紫藍色 */
+            color: #e5e7eb; /* 淺灰白色文字 */
+        }
+        /* 讓 Lucide Icons 在載入後自動渲染 */
+        [data-lucide] {
+            stroke-width: 2.5;
+        }
+        /* 自定義高光顏色，營造科技感 - 充滿活力的橘色 */
+        .ctf-highlight {
+            color: #FF8C00; /* 亮橘色/橘紅色 */
+        }
+        .ctf-card {
+            background-color: #1e293b; /* 深石板藍 */
+            border: 1px solid #3f4a60;
+            /* 使用橘色陰影增加立體感和活力 */
+            box-shadow: 0 6px 20px -5px rgba(255, 140, 0, 0.15), 0 3px 10px -3px rgba(255, 140, 0, 0.1); /* 調整陰影深度 */
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .ctf-card:hover {
+            transform: translateY(-5px); /* 更明顯的浮動效果 */
+            box-shadow: 0 18px 35px -5px rgba(255, 140, 0, 0.35), 0 8px 12px -4px rgba(255, 140, 0, 0.25); /* 提升 Hover 陰影 */
+        }
+        /* 主要按鈕的橘色光暈效果 */
+        .ctf-button-primary {
+             box-shadow: 0 0 25px rgba(255, 140, 0, 0.6); /* 強化光暈 */
+        }
+        /* 新增 CSS 脈衝動畫，讓元素更具動態感 */
+        @keyframes pulse-subtle {
+            0%, 100% { opacity: 0.9; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+        .animate-pulse-subtle {
+            animation: pulse-subtle 3s infinite ease-in-out;
+        }
+        /* 英雄區塊的特殊樣式 */
+        .ctf-hero-bg {
+             background: radial-gradient(circle at center, #1e293b 0%, #14172a 75%);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- 頂部導航欄 -->
+    <header class="bg-[#1e293b] border-b border-[#3f4a60] shadow-xl sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo/戰隊名稱 - 使用客製化 SVG 替換原有的 Lucide Icon -->
+                <a href="#" class="flex-shrink-0 flex items-center">
+                    <div class="ctf-highlight w-6 h-6 mr-2 flex items-center justify-center">
+                        <!-- 戰隊 Logo SVG (導航列版本) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="currentColor" class="w-full h-full">
+                            <!-- Shield Outline -->
+                            <path d="M5 25 L50 5 L95 25 L95 75 L50 95 L5 75 Z" fill="none" stroke="currentColor" stroke-width="5"></path>
+                            <!-- Flag Shape (Filled) -->
+                            <path d="M35 70 L40 30 C 55 20, 75 35, 70 25 L70 55 C 60 60, 45 60, 35 70 Z" fill="currentColor" transform="translate(0, 0) scale(0.9) translate(5, 0)"></path>
+                        </svg>
+                    </div>
+                    <span class="text-xl font-extrabold ctf-highlight tracking-widest">ZEROFLAG CTF</span>
+                </a>
+
+                <!-- 桌面導航連結 -->
+                <nav class="hidden md:flex md:space-x-8">
+                    <a href="#about" class="text-[#e5e7eb] hover:text-ctf-highlight px-3 py-2 rounded-md text-sm font-medium transition duration-150">關於我們</a>
+                    <a href="#vision" class="text-[#e5e7eb] hover:text-ctf-highlight px-3 py-2 rounded-md text-sm font-medium transition duration-150">我們的願景</a>
+                    <a href="#results" class="text-[#e5e7eb] hover:text-ctf-highlight px-3 py-2 rounded-md text-sm font-medium transition duration-150">競賽成果</a>
+                    <a href="#join" class="text-[#e5e7eb] hover:text-ctf-highlight px-3 py-2 rounded-md text-sm font-medium transition duration-150">加入我們</a>
+                </nav>
+
+                <!-- 聯絡按鈕 -->
+                <div class="flex items-center">
+                    <a href="#contact" class="bg-orange-500 text-white hover:bg-orange-600 transition duration-150 px-4 py-2 text-sm font-semibold rounded-lg shadow-lg flex items-center ctf-button-primary">
+                        <span data-lucide="mail" class="w-4 h-4 mr-2"></span>
+                        聯絡我們
+                    </a>
+                    <!-- 手機選單按鈕 -->
+                    <button id="menu-button" type="button" class="md:hidden inline-flex items-center justify-center p-2 rounded-md text-[#e5e7eb] hover:text-white hover:bg-[#3f4a60] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-ctf-highlight ml-4" aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">開啟主選單</span>
+                        <span data-lucide="menu" class="h-6 w-6" id="menu-icon-open"></span>
+                        <span data-lucide="x" class="h-6 w-6 hidden" id="menu-icon-close"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 手機選單 -->
+        <div class="md:hidden hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-[#3f4a60]">
+                <a href="#about" class="text-[#e5e7eb] hover:bg-[#3f4a60] block px-3 py-2 rounded-md text-base font-medium transition duration-150">關於我們</a>
+                <a href="#vision" class="text-[#e5e7eb] hover:bg-[#3f4a60] block px-3 py-2 rounded-md text-base font-medium transition duration-150">我們的願景</a>
+                <a href="#results" class="text-[#e5e7eb] hover:bg-[#3f4a60] block px-3 py-2 rounded-md text-base font-medium transition duration-150">競賽成果</a>
+                <a href="#join" class="text-[#e5e7eb] hover:bg-[#3f4a60] block px-3 py-2 rounded-md text-base font-medium transition duration-150">加入我們</a>
+                <a href="#contact" class="text-[#e5e7eb] hover:bg-[#3f4a60] block px-3 py-2 rounded-md text-base font-medium transition duration-150">聯絡我們</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主內容區塊 -->
+    <main class="flex-grow">
+        <div class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+
+            <!-- 英雄區塊 (Hero Section) - 更有衝勁的標語與視覺標誌 -->
+            <section id="hero" class="text-center mb-16 p-8 rounded-xl ctf-card border-orange-500/50 ctf-hero-bg">
+                
+                <!-- ZeroFlag 專屬 SVG Logo (中央大型 Logo) -->
+                <div class="mb-6 mx-auto w-24 h-24 sm:w-32 sm:h-32 relative text-orange-500 animate-pulse-subtle">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="w-full h-full">
+                        <!-- Shield Outline -->
+                        <path d="M5 25 L50 5 L95 25 L95 75 L50 95 L5 75 Z" fill="none" stroke="#FF8C00" stroke-width="5"></path>
+                        <!-- Flag Shape (Filled) -->
+                        <path d="M35 70 L40 30 C 55 20, 75 35, 70 25 L70 55 C 60 60, 45 60, 35 70 Z" fill="#FF8C00" transform="translate(0, 0) scale(0.9) translate(5, 0)"></path>
+                    </svg>
+                </div>
+
+                <h1 class="text-5xl sm:text-7xl font-extrabold mb-4 leading-tight text-white">
+                    <span class="ctf-highlight">ZEROFLAG CTF</span>
+                    <span class="block text-4xl sm:text-6xl mt-2">尋找你的旗幟！</span>
+                </h1>
+                <p class="text-xl text-gray-400 mb-8 max-w-3xl mx-auto">
+                    我們是 **ZeroFlag CTF** 戰隊，一群充滿熱情的高中生，在 CTF 競賽中散發出熱血、學習、並且不斷突破極限的精神。
+                </p>
+                <div class="space-x-4">
+                    <a href="#results" class="inline-flex items-center bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg shadow-xl transition duration-300 ctf-button-primary">
+                        <span data-lucide="trophy" class="w-5 h-5 mr-2"></span>
+                        我們的戰績
+                    </a>
+                    <a href="#join" class="inline-flex items-center bg-[#3f4a60] hover:bg-[#5a6b82] text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition duration-300">
+                        <span data-lucide="users" class="w-5 h-5 mr-2"></span>
+                        加入我們，寫下你人生的篇章！
+                    </a>
+                </div>
+            </section>
+
+            <!-- 關於戰隊 (About Section) -->
+            <section id="about" class="mb-16">
+                <h2 class="text-4xl font-bold mb-8 text-center border-b pb-3 border-[#3f4a60] text-white">
+                    <span class="ctf-highlight">|</span> 關於戰隊
+                </h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="p-8 rounded-xl ctf-card">
+                        <span data-lucide="code-square" class="ctf-highlight w-8 h-8 mb-3"></span>
+                        <h3 class="text-2xl font-bold mb-2 text-white">起源與技術領域</h3>
+                        <p class="text-lg text-gray-400">ZeroFlag CTF 戰隊由對於資安有興趣學生共同成立。我們專精於現代 CTF 的四大核心領域：Web 漏洞利用、Pwn (二進制漏洞)、Reverse Engineering (逆向工程) 和 Cryptography (密碼學)。</p>
+                    </div>
+                    <div id="vision" class="p-8 rounded-xl ctf-card">
+                        <span data-lucide="zap" class="ctf-highlight w-8 h-8 mb-3"></span>
+                        <h3 class="text-2xl font-bold mb-2 text-white">我們的熱血願景</h3>
+                        <p class="text-lg text-gray-400">我們的目標是打破常規，挑戰國際 CTF 賽事的排行榜前段！我們重視知識的流通與實戰經驗的累積，立志成為一個不僅能奪旗，更能推動社群技術發展的頂尖戰隊。</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 競賽成果 (Results Section) -->
+            <section id="results" class="mb-16">
+                <h2 class="text-4xl font-bold mb-8 text-center border-b pb-3 border-[#3f4a60] text-white">
+                    <span class="ctf-highlight">|</span> 競賽成果
+                </h2>
+                <div class="ctf-card p-6 rounded-xl overflow-x-auto">
+                    <table class="min-w-full divide-y divide-[#3f4a60]">
+                        <thead>
+                            <tr class="bg-[#1e293b]">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">比賽名稱</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">日期</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">總排名</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">得分</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">主要類型</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-[#3f4a60]">
+                            <!-- 紀錄 1 -->
+                            <tr class="hover:bg-[#253347] transition duration-150">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-white">DefiSec CTF 2024</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">2024/10</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm ctf-highlight font-extrabold">TOP 5%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-white">8750 pts</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-orange-400">Web / Pwn</td>
+                            </tr>
+                            <!-- 紀錄 2 -->
+                            <tr class="hover:bg-[#253347] transition duration-150">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-white">Ancient Code Challenge</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">2024/08</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm ctf-highlight font-extrabold">第 10 名</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-white">9200 pts</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-orange-400">Reverse / Crypto</td>
+                            </tr>
+                            <!-- 紀錄 3 -->
+                            <tr class="hover:bg-[#253347] transition duration-150">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-white">Local University Cup</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">2024/05</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm ctf-highlight font-extrabold">季軍</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-white">12500 pts</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-orange-400">All Round</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <!-- 加入我們 (Join Us Section) - 更活潑的卡片設計 -->
+            <section id="join" class="mb-16 text-center p-10 rounded-xl ctf-card border-orange-500/50">
+                <h2 class="text-4xl font-bold mb-4 text-white">
+                    <span class="ctf-highlight">|</span> 尋找你的戰友！
+                </h2>
+                <p class="text-xl text-gray-400 mb-8 max-w-3xl mx-auto">
+                    加入 ZeroFlag CTF，我們不只競賽，我們更建立一起成長的社群！我們尋找具備熱情與好奇心的隊員。
+                </p>
+                <div class="md:flex justify-center space-y-4 md:space-y-0 md:space-x-8">
+                    <div class="p-6 bg-[#14172a] rounded-xl border border-[#3f4a60] flex flex-col items-center hover:border-orange-500 transition duration-300 transform hover:scale-[1.05]">
+                        <span data-lucide="flask-conical" class="ctf-highlight w-10 h-10 mb-3"></span>
+                        <p class="text-xl font-bold text-white">實戰演練</p>
+                        <p class="text-sm text-gray-400">透過內部挑戰和競賽，快速累積實戰經驗。</p>
+                    </div>
+                    <div class="p-6 bg-[#14172a] rounded-xl border border-[#3f4a60] flex flex-col items-center hover:border-orange-500 transition duration-300 transform hover:scale-[1.05]">
+                        <span data-lucide="activity" class="ctf-highlight w-10 h-10 mb-3"></span>
+                        <p class="text-xl font-bold text-white">技術爆炸</p>
+                        <p class="text-sm text-gray-400">每週分享最新漏洞與解題技巧，技術成長加速！</p>
+                    </div>
+                    <div class="p-6 bg-[#14172a] rounded-xl border border-[#3f4a60] flex flex-col items-center hover:border-orange-500 transition duration-300 transform hover:scale-[1.05]">
+                        <span data-lucide="handshake" class="ctf-highlight w-10 h-10 mb-3"></span>
+                        <p class="text-xl font-bold text-white">戰隊友誼</p>
+                        <p class="text-sm text-gray-400">在 Discord 上隨時交流，建立深厚的戰友關係。</p>
+                    </div>
+                </div>
+                <a href="#contact" class="mt-12 inline-flex items-center bg-orange-500 hover:bg-orange-600 text-white font-extrabold py-4 px-10 rounded-full text-lg shadow-2xl transition duration-300 ctf-button-primary hover:shadow-orange-700/70">
+                    <span data-lucide="user-plus" class="w-5 h-5 mr-3"></span>
+                    立即申請
+                </a>
+            </section>
+            
+            <!-- 聯絡方式 (Contact Section) -->
+            <section id="contact" class="mb-16">
+                <h2 class="text-4xl font-bold mb-8 text-center border-b pb-3 border-[#3f4a60] text-white">
+                    <span class="ctf-highlight">|</span> 聯絡方式
+                </h2>
+                <div class="ctf-card p-8 rounded-xl grid md:grid-cols-3 gap-6 text-center">
+                    <!-- Discord -->
+                    <div class="flex flex-col items-center p-6 bg-[#14172a] rounded-lg border border-[#3f4a60] hover:border-orange-500 transition duration-300">
+                        <span data-lucide="message-circle" class="ctf-highlight w-12 h-12 mb-3"></span>
+                        <h4 class="text-xl font-bold text-white mb-1">Discord (DC)</h4>
+                        <a href="https://discord.gg/8qBAtECmwM" target="_blank" class="ctf-highlight font-mono text-base hover:underline">@ZeroFlagCTF</a>
+                        <p class="text-sm text-gray-400">(技術討論與即時問答)</p>
+                    </div>
+                    <!-- Instagram -->
+                    <div class="flex flex-col items-center p-6 bg-[#14172a] rounded-lg border border-[#3f4a60] hover:border-orange-500 transition duration-300">
+                        <span data-lucide="instagram" class="ctf-highlight w-12 h-12 mb-3"></span>
+                        <h4 class="text-xl font-bold text-white mb-1">Instagram</h4>
+                        <a href="https://www.instagram.com/zeroflag_ctf" target="_blank" class="ctf-highlight font-mono text-base hover:underline">@ZeroFlag_CTF</a>
+                        <p class="text-sm text-gray-400">(戰隊生活與最新動態)</p>
+                    </div>
+                    <!-- Gmail -->
+                    <div class="flex flex-col items-center p-6 bg-[#14172a] rounded-lg border border-[#3f4a60] hover:border-orange-500 transition duration-300">
+                        <span data-lucide="mail" class="ctf-highlight w-12 h-12 mb-3"></span>
+                        <h4 class="text-xl font-bold text-white mb-1">Gmail</h4>
+                        <a href="zeroflagctf@gmail.com" class="ctf-highlight font-mono text-base hover:underline">zeroflagctf@gmail.com</a>
+                        <p class="text-sm text-gray-400">(正式合作與商業詢問)</p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- 底部資訊 -->
+    <footer class="bg-[#1e293b] border-t border-[#3f4a60] mt-10 p-6 text-center text-sm text-gray-400">
+        <div class="max-w-7xl mx-auto">
+            <p>
+                &copy; <span id="current-year"></span> ZeroFlag CTF Team. All rights reserved. 
+            </p>
+        </div>
+    </footer>
+
+    <!-- 彈出訊息視窗 (模態視窗) -->
+    <div id="modal" class="fixed inset-0 bg-black bg-opacity-75 hidden flex items-center justify-center z-50 p-4">
+        <div class="bg-[#1e293b] p-6 rounded-lg shadow-2xl max-w-sm w-full border border-orange-500/50">
+            <h3 id="modal-title" class="text-xl font-bold mb-4 ctf-highlight">訊息</h3>
+            <p id="modal-message" class="text-white mb-6"></p>
+            <button onclick="closeModal()" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 rounded-lg transition duration-300">確認</button>
+        </div>
+    </div>
+
+    <!-- JavaScript 邏輯 (只保留 UI 和輔助功能) -->
+    <script>
+        // 確保 Lucide Icons 正確渲染並設定年份
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            document.getElementById('current-year').innerText = new Date().getFullYear();
+        });
+
+        // --- 選單/UI 邏輯 ---
+
+        const menuButton = document.getElementById('menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIconOpen = document.getElementById('menu-icon-open');
+        const menuIconClose = document.getElementById('menu-icon-close');
+
+        // 響應式手機選單切換
+        menuButton.addEventListener('click', () => {
+            const isExpanded = menuButton.getAttribute('aria-expanded') === 'true' || false;
+            menuButton.setAttribute('aria-expanded', !isExpanded);
+            mobileMenu.classList.toggle('hidden');
+            menuIconOpen.classList.toggle('hidden');
+            menuIconClose.classList.toggle('hidden');
+        });
+
+        // 點擊手機選單項目後自動關閉選單
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                menuIconOpen.classList.remove('hidden');
+                menuIconClose.classList.add('hidden');
+                menuButton.setAttribute('aria-expanded', 'false');
+            });
+        });
+
+        // --- UI 輔助功能 (模態視窗) ---
+
+        // 顯示自定義彈出視窗
+        function showModal(title, message) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-message').innerText = message;
+            document.getElementById('modal').classList.remove('hidden');
+        }
+
+        // 關閉自定義彈出視窗
+        function closeModal() {
+            document.getElementById('modal').classList.add('hidden');
+        }
+        
+    </script>
+
+</body>
+</html>
